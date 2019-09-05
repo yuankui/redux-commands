@@ -29,5 +29,6 @@
     "typescript": "^2.5.3"
   },
   "dependencies": {
+    "redux": "^4.0.4"
   }
 }
