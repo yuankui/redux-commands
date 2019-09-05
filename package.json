@@ -13,7 +13,14 @@
     "type": "git",
     "url": "git+https://github.com/yuankui/redux-commands.git"
   },
-  "keywords": [],
+  "keywords": [
+    "redux",
+    "commands",
+    "middleware",
+    "redux-middleware",
+    "fsa",
+    "flux"
+  ],
   "author": "yuankui <yuankui64@gmail.com>",
   "license": "MIT",
   "bugs": {
