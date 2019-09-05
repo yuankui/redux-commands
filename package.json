@@ -7,7 +7,6 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "publish": "npm publish",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha test/*.js -- -R spec"
   },
   "repository": {
