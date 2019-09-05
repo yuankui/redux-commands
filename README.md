@@ -12,10 +12,4 @@ yarn add redux-commands
 ### JavaScript
 
 ```javascript
-var pluralise = require('mypluralize');
-var boys = pluralise.getPlural('Boy');
-console.log(boys);
-
-var thief = pluralise.getSingular('Thieves');
-console.log(thief);
 ```
