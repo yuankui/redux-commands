@@ -32,11 +32,13 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
 export interface Mapper<S> {
 	(s: S): S,
 }
-export abstract class Command<S, C = string> {
+export abstract class Command<S, C = string> implements Action<any>{
 	abstract name(): C;
 	process(state: S): S | Promise<Mapper<S>> {
 		return state;
 	}
+
+	type = "CommandsAction";
 }
 
 export interface CommandAction<S> extends Action<string> {
