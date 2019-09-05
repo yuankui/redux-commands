@@ -1,6 +1,6 @@
 {
   "name": "redux-commands",
-  "version": "1.0.3",
+  "version": "1.0.0",
   "description": "a redux middleware that allows your dispatch commands",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,11 +15,11 @@
   },
   "keywords": [],
   "author": "yuankui <yuankui64@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/philipszdavido/mypluralize/issues"
+    "url": "https://github.com/yuankui/redux-commands/issues"
   },
-  "homepage": "https://github.com/philipszdavido/mypluralize#readme",
+  "homepage": "https://github.com/yuankui/redux-commands#readme",
   "devDependencies": {
     "@types/mocha": "^2.2.43",
     "coveralls": "^3.0.0",
