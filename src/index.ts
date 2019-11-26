@@ -1,35 +1,42 @@
-import {Action, Middleware, Reducer} from "redux";
+import {Action, AnyAction, Dispatch, Middleware, Reducer} from "redux";
 
 const CommandActionName = "CommandAction";
-const CommandPromiseActionName = "CommandPromiseAction";
+const CommandNullActionName = CommandActionName + ":null";
+const CommandPromiseActionName = CommandActionName + ":promise";
 
 export const commandMiddleware: Middleware = api => dispatch => action => {
     if (action instanceof Command) {
 
-        let result: any = action.process(api.getState());
+        // todo add parent action name here
+        let result: any = action.process(api.getState(), api.dispatch);
+        let extra = null;
+        if (action.json != null) {
+            try {
+                extra = action.json();
+            } catch (e) {
+                extra = e.toString();
+            }
+        }
 
         if (result == null) {
+            dispatch({
+                type: CommandNullActionName + ":" + action.name(),
+                extra,
+            });
             return action;
         }
         if (Promise.resolve(result) === result) {
             // if return is a promise
-
-			return new Promise<any>((resolve, reject) => {
-				(result as Promise<Mapper<any>>).then(mapper => {
-					const a = {
-						type: CommandPromiseActionName + ":" + action.name(),
-						mapper: mapper,
-						command: action,
-					};
-					dispatch(a);
-					resolve();
-				});
-			})
+            dispatch({
+                type: CommandPromiseActionName + ":" + action.name(),
+                extra,
+            });
+			return result;
         } else {
             dispatch({
                 type: CommandActionName + ":" + action.name(),
                 state: result,
-                command: action,
+                extra,
             });
 
             return action;
@@ -38,17 +45,22 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
     return dispatch(action);
 };
 
-export interface Mapper<S> {
-    (s: S): S,
-}
-
 export abstract class Command<S, C = string> implements Action<any> {
     abstract name(): C;
 
-    process(state: S): S | Promise<Mapper<S>> | null {
+    /**
+     * S: return a updated status
+     *
+     * Promise<void>: not update status immediately, bug dispatch use param: dispatch
+     *              when promise resolves, indicates the job has done.
+     * @param state current status
+     * @param dispatch top level dispatcher
+     */
+    process(state: S, dispatch: Dispatch<any>): S | Promise<void> | null {
         return state;
     }
 
+    json?(): object;
     type = "CommandsAction";
 }
 
@@ -61,12 +73,14 @@ export interface CommandAction<S> extends Action<string> {
 export function enhanceCommandReducer<S, A extends Action<string>>(reducer: Reducer<S, A>) {
     return function (state: S | undefined, action: A): S {
         if (action.type.startsWith(CommandActionName)) {
-            let a: any = action;
-            return a.state;
-        } else if (action.type.startsWith(CommandPromiseActionName)) {
-            const a: any = action;
-            const newState = a.mapper(state);
-            return newState;
+            if (action.type.startsWith(CommandPromiseActionName)) {
+                return state as S;
+            } else if (action.type.startsWith(CommandNullActionName)) {
+                return state as S;
+            } else {
+                let a: any = action;
+                return a.state;
+            }
         } else {
             return reducer(state, action);
         }
