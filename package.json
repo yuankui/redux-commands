@@ -1,6 +1,6 @@
 {
   "name": "redux-commands",
-  "version": "1.0.14",
+  "version": "2.0.0",
   "description": "a redux middleware that allows your dispatch commands",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
