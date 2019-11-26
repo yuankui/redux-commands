@@ -9,24 +9,25 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
 		let result: any = action.process(api.getState());
 		if (Promise.resolve(result) === result) {
 			// if return is a promise
+            const action = {
+                    type: CommandPromiseActionName + ":" + action.name(),
+                    mapper: mapper,
+                    command: action,
+                };
+
 			(result as Promise<Mapper<any>>).then(mapper => {
-				dispatch({
-					type: CommandPromiseActionName + ":" + action.name(),
-					mapper: mapper,
-					command: action,
-				})
+				dispatch(action)
 			});
-			return
+			return action;
 		} else {
-			dispatch({
+			return dispatch({
 				type: CommandActionName + ":" + action.name(),
 				state: result,
 				command: action,
 			});
-			return;
 		}
 	}
-	dispatch(action);
+	return dispatch(action);
 };
 
 export interface Mapper<S> {
