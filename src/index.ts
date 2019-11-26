@@ -7,6 +7,10 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
     if (action instanceof Command) {
 
         let result: any = action.process(api.getState());
+
+        if (result == null) {
+            return action;
+        }
         if (Promise.resolve(result) === result) {
             // if return is a promise
 
@@ -41,7 +45,7 @@ export interface Mapper<S> {
 export abstract class Command<S, C = string> implements Action<any> {
     abstract name(): C;
 
-    process(state: S): S | Promise<Mapper<S>> {
+    process(state: S): S | Promise<Mapper<S>> | null {
         return state;
     }
 
