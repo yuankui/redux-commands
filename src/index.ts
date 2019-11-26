@@ -19,7 +19,10 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
 
         // todo add parent action name here
         let result: any = action.process(api.getState(), (a: any) => {
-            a.parent = extra;
+            a.parent = {
+                command: action.name(),
+                extra: extra,
+            };
             return api.dispatch(a);
         });
 
