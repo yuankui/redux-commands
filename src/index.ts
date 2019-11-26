@@ -1,4 +1,4 @@
-import {Action, AnyAction, Dispatch, Middleware, Reducer} from "redux";
+import {Action, Dispatch, Middleware, Reducer} from "redux";
 
 const CommandActionName = "CommandAction";
 const CommandNullActionName = CommandActionName + ":null";
