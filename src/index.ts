@@ -7,9 +7,8 @@ const CommandPromiseActionName = CommandActionName + ":promise";
 export const commandMiddleware: Middleware = api => dispatch => action => {
     if (action instanceof Command) {
 
-        // todo add parent action name here
-        let result: any = action.process(api.getState(), api.dispatch);
-        let extra = null;
+
+        let extra: any = null;
         if (action.json != null) {
             try {
                 extra = action.json();
@@ -18,9 +17,16 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
             }
         }
 
+        // todo add parent action name here
+        let result: any = action.process(api.getState(), (a: any) => {
+            a.parent = extra;
+            return api.dispatch(a);
+        });
+
         if (result == null) {
             dispatch({
                 type: CommandNullActionName + ":" + action.name(),
+                parent: action.parent,
                 extra,
             });
             return action;
@@ -29,6 +35,7 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
             // if return is a promise
             dispatch({
                 type: CommandPromiseActionName + ":" + action.name(),
+                parent: action.parent,
                 extra,
             });
 			return result;
@@ -36,6 +43,7 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
             dispatch({
                 type: CommandActionName + ":" + action.name(),
                 state: result,
+                parent: action.parent,
                 extra,
             });
 
@@ -47,6 +55,7 @@ export const commandMiddleware: Middleware = api => dispatch => action => {
 
 export abstract class Command<S, C = string> implements Action<any> {
     abstract name(): C;
+    parent: any = null;
 
     /**
      * S: return a updated status
