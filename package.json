@@ -1,12 +1,12 @@
 {
   "name": "redux-commands",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "a redux middleware that allows your dispatch commands",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "npm version patch && tsc",
-    "publish": "yarn build && npm publish",
+    "deploy": "yarn build && npm publish",
     "test": "jest",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha test/*.js -- -R spec"
   },
