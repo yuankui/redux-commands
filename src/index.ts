@@ -7,7 +7,6 @@ const CommandPromiseActionName = CommandActionName + ":promise";
 export const commandMiddleware: Middleware = api => dispatch => action => {
     if (action instanceof Command) {
 
-
         let extra: any = null;
         if (action.json != null) {
             try {
