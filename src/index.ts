@@ -66,6 +66,9 @@ export abstract class Command<S, C = string> implements Action<any> {
      *              when promise resolves, indicates the job has done.
      * @param state current status
      * @param dispatch top level dispatcher
+     * @returns null if no need to update state sync
+     * @returns S if update state to S
+     * @returns Promise<S> if update state to S async
      */
     process(state: S, dispatch: Dispatch<any>): S | Promise<void> | null {
         return state;
